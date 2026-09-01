@@ -1,5 +1,6 @@
 from django.urls import include, path
 from django.views.generic import TemplateView
+from django.views.i18n import set_language
 
 from . import hooks
 from .conf import settings
@@ -29,6 +30,7 @@ urlpatterns = [
     path("", include("misago.search.urls")),
     path("", include("misago.oauth2.urls")),
     path("", include("misago.socialauth.urls")),
+    path("i18n/setlang/", set_language, name="set-language"),
     path("formatting-help/", formatting_help, name="formatting-help"),
     path("", include("misago.healthcheck.urls")),
     # default robots.txt

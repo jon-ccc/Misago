@@ -61,3 +61,5 @@ docker-compose.override.yml
 
 # Database snapshot
 database.sql
+nul
+tmp_msgids.txt

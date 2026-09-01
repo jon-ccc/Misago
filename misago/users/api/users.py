@@ -32,7 +32,7 @@ from ..permissions import (
 )
 from ..profilefields import profilefields, serialize_profilefields_data
 from ..serializers import BanDetailsSerializer, UserSerializer
-from ..viewmodels import Followers, Follows, UserPosts, UserThreads
+from ..viewmodels import Followers, Follows
 from .rest_permissions import BasePermission, UnbannedAnonOnly
 from .userendpoints.avatar import avatar_endpoint, moderate_avatar_endpoint
 from .userendpoints.create import create_endpoint
@@ -263,20 +263,6 @@ class UserViewSet(viewsets.GenericViewSet):
         users = Follows(request, profile, page, search)
 
         return Response(users.get_frontend_context())
-
-    @action(methods=["get"], detail=True)
-    def threads(self, request, pk=None):
-        profile = self.get_user(request, pk)
-        start = get_int_or_404(request.query_params.get("start", 0))
-        feed = UserThreads(request, profile, start)
-        return Response(feed.get_frontend_context())
-
-    @action(methods=["get"], detail=True)
-    def posts(self, request, pk=None):
-        profile = self.get_user(request, pk)
-        start = get_int_or_404(request.query_params.get("start", 0))
-        feed = UserPosts(request, profile, start)
-        return Response(feed.get_frontend_context())
 
 
 UserProfileSerializer = UserSerializer.subset_fields(

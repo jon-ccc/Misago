@@ -37,6 +37,39 @@
         </ul>
       {% endif %}
 
+      {% if LANGUAGES|length > 1 %}
+        <form
+          action="{% url 'misago:set-language' %}"
+          method="post"
+          class="misago-language-switch"
+        >
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <label for="misago-language" class="sr-only">
+            {% translate "Language" context "language switcher" %}
+          </label>
+          <select
+            id="misago-language"
+            name="language"
+            class="form-control"
+            style="display: inline-block; width: auto; height: 32px; padding: 4px 8px; margin: 0 8px 0 0; vertical-align: middle; font-size: 13px;"
+            onchange="this.form.submit()"
+          >
+            {% get_current_language as CURRENT_LANGUAGE %}
+            {% for code, name in LANGUAGES %}
+              <option value="{{ code }}"{% if code == CURRENT_LANGUAGE %} selected{% endif %}>
+                {{ name }}
+              </option>
+            {% endfor %}
+          </select>
+          <noscript>
+            <button type="submit" class="btn btn-default btn-sm">
+              {% translate "Change language" context "language switcher" %}
+            </button>
+          </noscript>
+        </form>
+      {% endif %}
+
       <a href="http://misago-project.org" class="misago-branding">
         powered by <strong>misago</strong>
       </a>

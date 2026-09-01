@@ -115,7 +115,6 @@ class UserPostsView(ProfileView):
     def get_context_data(self, request, profile):
         feed = UserPosts(request, profile)
 
-        request.frontend_context["POSTS"] = feed.get_frontend_context()
         return feed.get_template_context()
 
 
@@ -125,7 +124,6 @@ class UserThreadsView(ProfileView):
     def get_context_data(self, request, profile):
         feed = UserThreads(request, profile)
 
-        request.frontend_context["POSTS"] = feed.get_frontend_context()
         return feed.get_template_context()
 
 

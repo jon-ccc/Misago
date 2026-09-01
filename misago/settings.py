@@ -3,6 +3,8 @@
 __all__ = [
     "INSTALLED_APPS",
     "INSTALLED_PLUGINS",
+    "LANGUAGES",
+    "LANGUAGE_COOKIE_NAME",
     "MISAGO_ATTACHMENTS_SERVER",
     "MISAGO_DEFAULT_OG_IMAGE",
     "MISAGO_DEFAULT_OG_IMAGE_WIDTH",
@@ -137,6 +139,7 @@ MISAGO_MIDDLEWARE = [
     "misago.core.middleware.FrontendContextMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -247,3 +250,25 @@ MISAGO_PYGMENTS_LANGUAGES = (
 
 # For use in tests only
 MISAGO_PARSER_CLEAN_AST = True
+
+
+# ---------------------------------------------------------------------------
+# Internationalization
+# ---------------------------------------------------------------------------
+
+# Languages available to forum visitors through the language switcher in the
+# footer. The first entry is the default (fallback) language.
+# Each key must have a matching gettext catalog in:
+#   misago/locale/<code>/LC_MESSAGES/{django,djangojs}.{po,mo}
+LANGUAGES = [
+    ("en-us", "English"),
+    ("zh-hans", "简体中文"),
+]
+
+# Name of the cookie used to persist the visitor's language choice.
+# Django's LocaleMiddleware and the built-in `set_language` view rely on it.
+LANGUAGE_COOKIE_NAME = "misago_language"
+
+# Do not share the language cookie across the site (single-origin behavior).
+LANGUAGE_COOKIE_HTTPONLY = False
+LANGUAGE_COOKIE_SAMESITE = "Lax"

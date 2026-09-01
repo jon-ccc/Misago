@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 from rest_framework import serializers
 
 from ...core.serializers import MutableFields
@@ -102,7 +102,7 @@ class UserSerializer(serializers.ModelSerializer, MutableFields):
             return None
 
     def get_api(self, obj):
-        return {
+        api = {
             "index": reverse("misago:api:user-detail", kwargs={"pk": obj.pk}),
             "follow": reverse("misago:api:user-follow", kwargs={"pk": obj.pk}),
             "ban": reverse("misago:api:user-ban", kwargs={"pk": obj.pk}),
@@ -119,9 +119,18 @@ class UserSerializer(serializers.ModelSerializer, MutableFields):
             "delete": reverse("misago:api:user-delete", kwargs={"pk": obj.pk}),
             "followers": reverse("misago:api:user-followers", kwargs={"pk": obj.pk}),
             "follows": reverse("misago:api:user-follows", kwargs={"pk": obj.pk}),
-            "threads": reverse("misago:api:user-threads", kwargs={"pk": obj.pk}),
-            "posts": reverse("misago:api:user-posts", kwargs={"pk": obj.pk}),
         }
+
+        # These endpoints may be absent (e.g. when the user threads/posts API
+        # actions have been removed). Resolve them defensively so that a
+        # missing URL name does not crash serialization.
+        for key, name in (("threads", "misago:api:user-threads"), ("posts", "misago:api:user-posts")):
+            try:
+                api[key] = reverse(name, kwargs={"pk": obj.pk})
+            except NoReverseMatch:
+                api[key] = None
+
+        return api
 
     def get_url(self, obj):
         return obj.get_absolute_url()

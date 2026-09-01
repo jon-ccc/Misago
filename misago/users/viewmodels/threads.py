@@ -50,16 +50,5 @@ class UserThreads:
             id__in=threads_queryset.values("first_post_id")
         )
 
-    def get_frontend_context(self):
-        return {
-            "results": UserFeedSerializer(
-                self.posts, many=True, context={"user": self._user}
-            ).data,
-            "next": self.list_page.next,
-        }
-
     def get_template_context(self):
         return {"posts": self.posts, "next": self.list_page.next}
-
-
-UserFeedSerializer = None
