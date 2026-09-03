@@ -148,8 +148,8 @@ export default class Lightbox {
     if (state.total > 1) {
       pager.textContent = pager
         .getAttribute("misago-lightbox-pager")
-        .replace("%(total)s", state.total)
-        .replace("%(index)s", state.index + 1)
+        .replace("{total}", state.total)
+        .replace("{index}", state.index + 1)
       pager.classList.remove("d-none")
     } else {
       pager.textContent = ""

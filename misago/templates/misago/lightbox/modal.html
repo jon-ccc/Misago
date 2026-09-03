@@ -7,7 +7,9 @@
 >
   <div class="lightbox-body" role="document">
     <div class="lightbox-toolbar">
-      <span class="lightbox-pager" misago-lightbox-pager="{% translate '%(index)s of %(total)s' context 'lightbox' %}"></span>
+      {# "{index}" and "{total}" are replaced client-side; "%" placeholders can't
+         be used here because makemessages escapes them into "%%" in the catalog #}
+      <span class="lightbox-pager" misago-lightbox-pager="{% translate '{index} of {total}' context 'lightbox' %}"></span>
       <a href="" class="btn-lightbox" title="{% translate 'Info' context 'lightbox' %}" target="_blank" misago-lightbox-details>
         <span class="material-icon" aria-hidden="true">info</span>
       </a>

@@ -182,6 +182,17 @@ def parse(po_path):
             index += 1
             continue
         if stripped.startswith("#"):
+            if stripped.startswith("#~"):
+                # obsolete entry: flags/comments directly above (e.g.
+                # '#, python-format') belong to the obsolete block itself
+                while index < total and lines[index].strip().startswith("#~"):
+                    pending_comments.append(lines[index])
+                    index += 1
+                entry = Entry()
+                entry.comment_lines = pending_comments
+                entries.append(entry)
+                pending_comments = []
+                continue
             pending_comments.append(lines[index])
             index += 1
             continue
@@ -245,6 +256,7 @@ def escape(value):
     return (
         value.replace("\\", "\\\\")
         .replace('"', '\\"')
+        .replace("\r", "\\r")
         .replace("\n", "\\n")
         .replace("\t", "\\t")
     )
@@ -470,6 +482,113 @@ def cmd_check(po_path):
     return 0
 
 
+def _clean_comment_lines(lines):
+    """Drop the fuzzy flag and stale "#|" previous-msgid comments.
+
+    msgmerge re-fuzzies entries that still carry "#|" comments from an
+    earlier merge, so both must go for an entry to stay translated.
+    """
+    cleaned = []
+    for line in lines:
+        if line.lstrip().startswith("#|"):
+            continue
+        stripped = _strip_fuzzy_flag(line)
+        if stripped is not None:
+            cleaned.append(stripped)
+    return cleaned
+
+
+def _strip_fuzzy_flag(line):
+    """Remove the 'fuzzy' flag from a '#, flags' comment line.
+
+    Returns the cleaned line, or None when no flags remain.
+    """
+    stripped = line.strip()
+    if not stripped.startswith("#,"):
+        return line
+    flags = [flag for flag in stripped[2:].split(",") if flag.strip()]
+    flags = [flag for flag in flags if flag != "fuzzy"]
+    if not flags:
+        return None
+    return "#, " + ", ".join(flags)
+
+
+def cmd_unfuzzy(po_path, verbose=False):
+    """Promote fuzzy entries whose kept translation still passes sanity checks.
+
+    Fuzzy entries that fail the checks keep their flag (and are therefore
+    excluded from the compiled .mo) and are reported for manual review.
+    """
+    entries = parse(po_path)
+    messages = _message_entries(entries)
+    promoted = 0
+    kept = 0
+    for entry in messages:
+        if not entry.fuzzy:
+            continue
+        translation = entry.msgstr[0][1] if entry.msgstr else ""
+        problems = []
+        if not translation.strip():
+            problems.append("empty translation")
+        source_placeholders = set(PLACEHOLDER_RE.findall(entry.msgid))
+        if entry.msgid_plural:
+            source_placeholders |= set(PLACEHOLDER_RE.findall(entry.msgid_plural))
+        for _, value in entry.msgstr:
+            for placeholder in source_placeholders:
+                if placeholder not in value:
+                    problems.append("missing %s" % placeholder)
+            for placeholder in set(PLACEHOLDER_RE.findall(value)) - source_placeholders:
+                problems.append("unknown %s" % placeholder)
+        if entry.msgid.endswith(":") and not translation.endswith((":", "：")):
+            problems.append("missing colon")
+        if problems:
+            kept += 1
+            if verbose:
+                print("KEEP FUZZY (%s): %r -> %r" % (problems[0], entry.msgid[:60], translation[:40]))
+            continue
+        entry.comment_lines = _clean_comment_lines(entry.comment_lines)
+        promoted += 1
+
+    with open(po_path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(serialize(entries))
+    print("unfuzzied %d entries, kept fuzzy %d (need manual review)" % (promoted, kept))
+    return 0
+
+
+def cmd_fixapply(po_path, json_path):
+    """Apply keyed translations: JSON list of {ctx, id, pl, t}.
+
+    `t` is a string (msgstr / msgstr[0]) and the fuzzy flag is cleared on
+    every touched entry, so fuzzy candidates can be fixed in one pass.
+    """
+    with open(json_path, encoding="utf-8") as fh:
+        items = json.load(fh)
+
+    entries = parse(po_path)
+    index = {}
+    for entry in _message_entries(entries):
+        key = (entry.msgctxt, entry.msgid, entry.msgid_plural)
+        index.setdefault(key, entry)
+
+    applied = 0
+    missed = []
+    for item in items:
+        entry = index.get((item.get("ctx"), item["id"], item.get("pl")))
+        if entry is None:
+            missed.append(item["id"][:60])
+            continue
+        entry.translation = item["t"]
+        entry.comment_lines = _clean_comment_lines(entry.comment_lines)
+        applied += 1
+
+    with open(po_path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(serialize(entries))
+    print("applied %d translations to %s (missed %d)" % (applied, po_path, len(missed)))
+    for msgid in missed[:15]:
+        print("  MISS: %r" % msgid)
+    return 0
+
+
 COMMANDS = {
     "verify": cmd_verify,
     "stats": cmd_stats,
@@ -477,6 +596,8 @@ COMMANDS = {
     "apply": cmd_apply,
     "compile": cmd_compile,
     "check": cmd_check,
+    "unfuzzy": cmd_unfuzzy,
+    "fixapply": cmd_fixapply,
 }
 
 
@@ -498,6 +619,10 @@ def main(argv):
         cmd_compile(args[0], args[1] if len(args) > 1 else None)
     elif command == "check":
         return cmd_check(args[0])
+    elif command == "unfuzzy":
+        return cmd_unfuzzy(args[0], verbose=len(args) > 1 and args[1] == "-v")
+    elif command == "fixapply":
+        return cmd_fixapply(args[0], args[1])
     return 0
 
 

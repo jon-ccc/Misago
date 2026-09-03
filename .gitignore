@@ -63,3 +63,4 @@ docker-compose.override.yml
 database.sql
 nul
 tmp_msgids.txt
+devproject/static/

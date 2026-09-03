@@ -1,3 +1,4 @@
+{% load i18n %}
 <div id="misago-dev-warning">
   <form
     action="{% url 'dismiss-dev-warning' %}"
@@ -9,27 +10,31 @@
     {% csrf_token %}
     <div class="container">
       <p>
-        Misago code checked out from the <code>misago</code> GitHub repository may be a work in progress and should not be used to evaluate the software or run live forums.
+        {% blocktranslate trimmed with repository="<code>misago</code>" context "dev warning" %}
+          Misago code checked out from the {{ repository }} GitHub repository may be a work in progress and should not be used to evaluate the software or run live forums.
+        {% endblocktranslate %}
       </p>
       <p>
-        Features may be missing, incomplete, or broken, and there may be no way to upgrade the database to future versions.
+        {% translate "Features may be missing, incomplete, or broken, and there may be no way to upgrade the database to future versions." context "dev warning" %}
       </p>
       <p>
-        To run a live forum, use one of the provided Docker images:
+        {% translate "To run a live forum, use one of the provided Docker images:" context "dev warning" %}
       </p>
       <ul class="list-unstyled">
         <li>
-          <a href="https://github.com/rafalp/misago_docker" target="_blank">Misago Docker (official)</a>
+          <a href="https://github.com/rafalp/misago_docker" target="_blank">{% translate "Misago Docker (official)" context "dev warning" %}</a>
         </li>
         <li>
-          <a href="https://github.com/tetricky/misago-image" target="_blank">Misago Image (community)</a>
+          <a href="https://github.com/tetricky/misago-image" target="_blank">{% translate "Misago Image (community)" context "dev warning" %}</a>
         </li>
       </ul>
       <p>
-        To evaluate a released version on your machine, clone one of <a href="https://github.com/rafalp/Misago/releases" target="_blank">the release tags from GitHub</a>.
+        {% blocktranslate trimmed with release_tags_url="https://github.com/rafalp/Misago/releases" context "dev warning" %}
+          To evaluate a released version on your machine, clone one of <a href="{{ release_tags_url }}" target="_blank">the release tags from GitHub</a>.
+        {% endblocktranslate %}
       </p>
       <button class="btn btn-default">
-        I understand
+        {% translate "I understand" context "dev warning" %}
       </button>
     </div>
   </form>

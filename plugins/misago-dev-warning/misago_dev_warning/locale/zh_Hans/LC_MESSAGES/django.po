@@ -1,0 +1,65 @@
+# Chinese (Simplified) translation of the Misago dev warning plugin.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: misago-dev-warning\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-02 12:39+0000\n"
+"PO-Revision-Date: 2026-09-02 12:40+0000\n"
+"Last-Translator: \n"
+"Language-Team: Chinese (Simplified)\n"
+"Language: zh_Hans\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: plugins/misago-dev-warning/misago_dev_warning/templates/misago_dev_warning/message.html:13
+#, python-format
+msgctxt "dev warning"
+msgid ""
+"Misago code checked out from the %(repository)s GitHub repository may be a "
+"work in progress and should not be used to evaluate the software or run live "
+"forums."
+msgstr ""
+"从 %(repository)s GitHub 仓库检出的 Misago 代码可能仍在开发中，不应用于评估该软"
+"件或运行正式论坛。"
+
+#: plugins/misago-dev-warning/misago_dev_warning/templates/misago_dev_warning/message.html:18
+msgctxt "dev warning"
+msgid ""
+"Features may be missing, incomplete, or broken, and there may be no way to "
+"upgrade the database to future versions."
+msgstr ""
+"功能可能缺失、不完整或存在缺陷，并且可能无法将数据库升级到未来的版本。"
+
+#: plugins/misago-dev-warning/misago_dev_warning/templates/misago_dev_warning/message.html:21
+msgctxt "dev warning"
+msgid "To run a live forum, use one of the provided Docker images:"
+msgstr "若要运行正式论坛，请使用以下提供的 Docker 镜像："
+
+#: plugins/misago-dev-warning/misago_dev_warning/templates/misago_dev_warning/message.html:25
+msgctxt "dev warning"
+msgid "Misago Docker (official)"
+msgstr "Misago Docker（官方）"
+
+#: plugins/misago-dev-warning/misago_dev_warning/templates/misago_dev_warning/message.html:28
+msgctxt "dev warning"
+msgid "Misago Image (community)"
+msgstr "Misago Image（社区）"
+
+#: plugins/misago-dev-warning/misago_dev_warning/templates/misago_dev_warning/message.html:32
+#, python-format
+msgctxt "dev warning"
+msgid ""
+"To evaluate a released version on your machine, clone one of <a "
+"href=\"%(release_tags_url)s\" target=\"_blank\">the release tags from "
+"GitHub</a>."
+msgstr ""
+"若要在本地评估已发布的版本，请从 <a href=\"%(release_tags_url)s\" "
+"target=\"_blank\">GitHub 上的发布标签</a>中克隆任意一个。"
+
+#: plugins/misago-dev-warning/misago_dev_warning/templates/misago_dev_warning/message.html:37
+msgctxt "dev warning"
+msgid "I understand"
+msgstr "我明白了"
