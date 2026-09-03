@@ -12,15 +12,13 @@
   <div class="container page-container">
     {% includecomponent breadcrumbs %}
 
-    {% if preview %}
-      {% include "misago/posting/preview.html" %}
-    {% endif %}
-
-    <form 
-      action="{% url 'misago:thread-start' category_id=category.id slug=category.slug %}"
-      method="post"
-      enctype="multipart/form-data"
-    >
+    <div class="posting-split">
+      <form
+        class="posting-split-form"
+        action="{% url 'misago:thread-start' category_id=category.id slug=category.slug %}"
+        method="post"
+        enctype="multipart/form-data"
+      >
       {% csrf_token %}
       <div class="panel panel-default panel-form">
         <div class="panel-heading">
@@ -68,12 +66,15 @@
           <button class="btn btn-primary" type="submit">
             {% translate "Start thread" context "start thread submit btn" %}
           </button>
-          <button class="btn btn-secondary" type="submit" name="{{ formset.preview_action }}" value="true" formnovalidate>
+          <button class="btn btn-secondary" type="submit" name="{{ formset.preview_action }}" value="true" formnovalidate misago-live-preview-hide>
             {% translate "Preview" context "start thread preview btn" %}
           </button>
         </div>
       </div>
-    </form>
+      </form>
+
+      {% include "misago/posting/preview.html" %}
+    </div>
 
     {% include "misago/main_footer.html" %}
   </div>

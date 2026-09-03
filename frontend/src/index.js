@@ -19,7 +19,7 @@ import "./htmx-loader"
 import "./htmx-modal"
 import Lightbox from "./lightbox"
 import loader from "./loader"
-import editor, { activateEditors } from "./editor"
+import editor, { activateEditors, activateLivePreviews } from "./editor"
 import "./pagination"
 import activatePollChoicesControl from "./PollChoicesControl"
 import quote from "./Quote"
@@ -146,6 +146,7 @@ export default misago
 
 // Register editor events
 document.addEventListener("htmx:load", activateEditors)
+document.addEventListener("htmx:load", activateLivePreviews)
 
 // Hide moderation modal
 const HIDE_MODERATION_MODAL_EVENTS = [

@@ -6,3 +6,15 @@ class MarkupSerializer(serializers.Serializer):
 
     def validate(self, data):
         return data
+
+
+class PreviewMarkupSerializer(serializers.Serializer):
+    post = serializers.CharField(required=False, allow_blank=True)
+    attachments = serializers.ListField(
+        child=serializers.IntegerField(),
+        required=False,
+        max_length=100,
+    )
+
+    def validate(self, data):
+        return data

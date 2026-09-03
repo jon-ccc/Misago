@@ -12,18 +12,21 @@
     {% csrf_token %}
     <input type="hidden" name="quick_reply" value="true" />
     <div class="panel-body">
-      {% if preview %}
+      <div class="posting-split">
+        <div class="posting-split-form">
+          {% include "misago/posting/errors.html" %}
+          {% for form in formset.get_forms %}
+            {% include form.template_name with form=form %}
+          {% endfor %}
+        </div>
+
         {% include "misago/posting/preview.html" %}
-      {% endif %}
-      {% include "misago/posting/errors.html" %}
-      {% for form in formset.get_forms %}
-        {% include form.template_name with form=form %}
-      {% endfor %}
+      </div>
       <div class="panel-quick-reply-footer">
         <button class="btn btn-primary" type="submit">
           {% translate "Post reply" context "quick reply thread submit btn" %}
         </button>
-        <button class="btn btn-secondary" type="submit" name="{{ formset.preview_action }}" value="true" formnovalidate>
+        <button class="btn btn-secondary" type="submit" name="{{ formset.preview_action }}" value="true" formnovalidate misago-live-preview-hide>
           {% translate "Preview" context "quick reply thread submit btn" %}
         </button>
       </div>

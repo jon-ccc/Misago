@@ -1,0 +1,135 @@
+//
+// Posting form split layout (editor on the left, live preview on the right)
+// --------------------------------------------------
+// Adapted across Bootstrap 3 breakpoints:
+//   xs  < 768    stacked (preview below editor)
+//   sm  768-991  stacked
+//   md  992-1199 split 60/40
+//   lg  1200+    split 65/35
+//   xl  1600+    split 60/40
+
+@posting-split-preview-offset: @navbar-height + 2 * @padding-base-vertical;
+
+// Base (mobile): single column, preview below the editor
+.posting-split {
+  display: flex;
+  flex-direction: column;
+  gap: @line-height-computed;
+}
+
+.posting-split-form {
+  width: 100%;
+  min-width: 0;
+}
+
+.posting-split > .panel-message-preview {
+  width: 100%;
+}
+
+// md (≥ 992): side by side
+@media screen and (min-width: @screen-md-min) {
+  .posting-split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: @grid-gutter-width;
+  }
+
+  .posting-split-form {
+    flex: 1 1 60%;
+    width: 60%;
+  }
+
+  .posting-split > .panel-message-preview {
+    flex: 1 1 40%;
+    width: 40%;
+    position: sticky;
+    top: @navbar-height + @padding-base-vertical;
+    max-height: ~"calc(100vh - @{posting-split-preview-offset})";
+    overflow-y: auto;
+  }
+}
+
+// lg (≥ 1200): give the editor a bit more room
+@media screen and (min-width: @screen-lg-min) {
+  .posting-split-form {
+    flex: 1 1 65%;
+    width: 65%;
+  }
+
+  .posting-split > .panel-message-preview {
+    flex: 1 1 35%;
+    width: 35%;
+  }
+}
+
+// xl (≥ 1600): plenty of space, rebalance toward the preview
+@media screen and (min-width: 1600px) {
+  .posting-split-form {
+    flex: 1 1 60%;
+    width: 60%;
+  }
+
+  .posting-split > .panel-message-preview {
+    flex: 1 1 40%;
+    width: 40%;
+  }
+}
+
+// Narrow containers (eg. inline edit in the post feed) always stay stacked:
+// the surrounding column is too tight for a usable side-by-side preview.
+.posting-split-narrow {
+  flex-direction: column;
+  gap: @line-height-computed;
+}
+
+.posting-split-narrow .posting-split-form {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.posting-split-narrow > .panel-message-preview {
+  flex: 0 0 auto;
+  width: 100%;
+  position: static;
+  max-height: none;
+}
+
+// Live preview behaviour
+[misago-live-preview-body] {
+  min-width: 0;
+  transition: opacity 0.15s ease-in-out;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+
+  // Keep wide blocks from blowing out the column
+  pre,
+  code,
+  table,
+  blockquote,
+  img,
+  iframe {
+    max-width: 100%;
+  }
+
+  pre,
+  .code-block {
+    overflow-x: auto;
+  }
+
+  img {
+    height: auto;
+  }
+}
+
+[misago-live-preview-loading] [misago-live-preview-body] {
+  opacity: 0.5;
+}
+
+// Bootstrap's `.btn` sets display, which beats the UA [hidden] rule
+[misago-live-preview-hide][hidden] {
+  display: none !important;
+}
+
+[misago-live-preview-error][hidden] {
+  display: none;
+}

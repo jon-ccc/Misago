@@ -1,13 +1,20 @@
 {% load i18n misago_rich_text %}
-<div class="panel panel-default panel-form panel-message-preview">
+<div class="panel panel-default panel-form panel-message-preview" misago-live-preview>
   <div class="panel-heading">
     <h3 class="panel-title">
       {% translate "Message preview" context "start thread page" %}
     </h3>
   </div>
   <div class="panel-body">
-    <article class="rich-text" misago-lightbox-root>
-      {% rich_text preview preview_rich_text_data thread=thread %}
+    <article class="rich-text" misago-lightbox-root misago-live-preview-body>
+      {% if preview %}
+        {% rich_text preview preview_rich_text_data thread=thread %}
+      {% else %}
+        <p class="text-muted">
+          {% translate "Start typing to see the message preview." context "message preview" %}
+        </p>
+      {% endif %}
     </article>
   </div>
+  <div class="panel-body" misago-live-preview-error hidden></div>
 </div>

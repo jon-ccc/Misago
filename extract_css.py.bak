@@ -1,0 +1,12 @@
+"""Extract compiled split CSS from the generated preview HTML."""
+import re
+
+with open('/app/posting_split_preview.html') as f:
+    html = f.read()
+
+m = re.search(r'<style>\n(.+?)\n</style>', html, re.S)
+if not m:
+    print('NO MATCH')
+    raise SystemExit(1)
+
+print(m.group(1))

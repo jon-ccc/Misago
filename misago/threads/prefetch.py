@@ -395,7 +395,7 @@ def fetch_likes(
     for post in data["posts"].values():
         # Fast look-up user in post's last likes
         if post.last_likes:
-            users_ids = [like["id"] for like in post.last_likes if list["id"]]
+            users_ids = [like["id"] for like in post.last_likes if like["id"]]
             if user_id in users_ids:
                 data["liked_posts"].add(post.id)
 

@@ -11,19 +11,20 @@
     hx-swap="innerHTML show:#post-{{ post.id }}:top"
   >
     {% csrf_token %}
-    <div class="post-feed-item-post-edit-form-body">
-      {% if preview %}
-        {% include "misago/posting/preview.html" %}
-      {% endif %}
-      {% for form in formset.get_forms %}
-        {% include form.template_name with form=form %}
-      {% endfor %}
+    <div class="post-feed-item-post-edit-form-body posting-split posting-split-narrow">
+      <div class="posting-split-form">
+        {% for form in formset.get_forms %}
+          {% include form.template_name with form=form %}
+        {% endfor %}
+      </div>
+
+      {% include "misago/posting/preview.html" %}
     </div>
     <div class="post-feed-item-post-edit-form-footer">
       <button class="btn btn-primary" type="submit">
         {% translate "Save" context "inline edit submit btn" %}
       </button>
-      <button class="btn btn-secondary" type="submit" name="{{ formset.preview_action }}" value="true" formnovalidate>
+      <button class="btn btn-secondary" type="submit" name="{{ formset.preview_action }}" value="true" formnovalidate misago-live-preview-hide>
         {% translate "Preview" context "inline edit preview btn" %}
       </button>
       <button
