@@ -1,77 +1,138 @@
 //
 // Posting form split layout (editor on the left, live preview on the right)
 // --------------------------------------------------
-// Adapted across Bootstrap 3 breakpoints:
-//   xs  < 768    stacked (preview below editor)
-//   sm  768-991  stacked
-//   md  992-1199 split 60/40
-//   lg  1200+    split 65/35
-//   xl  1600+    split 60/40
+// Fullscreen responsive breakpoints for 720p to 4K:
+//   Mobile:    < 768px     stacked (preview below editor), full height
+//   Tablet:    768-1023px  stacked, optimized height
+//   Small Desktop: 1024-1439px  split 50/50
+//   Desktop:   1440-1919px  split 50/50, optimized spacing
+//   Large Desktop: 1920-2559px  split 50/50, enhanced content area
+//   Ultra Wide: ≥2560px  split 50/50, maximum content area
 
-@posting-split-preview-offset: @navbar-height + 2 * @padding-base-vertical;
+@posting-split-preview-offset: @posting-fullscreen-offset;
 
-// Base (mobile): single column, preview below the editor
+// Base (mobile): single column, preview below the editor, fullscreen height
 .posting-split {
   display: flex;
   flex-direction: column;
   gap: @line-height-computed;
+  min-height: ~"calc(100vh - @{posting-fullscreen-offset})";
 }
 
 .posting-split-form {
   width: 100%;
   min-width: 0;
+  flex: 1;
 }
 
 .posting-split > .panel-message-preview {
   width: 100%;
+  flex: 1;
+  max-height: ~"calc(100vh - @{posting-fullscreen-offset} - 300px)";
+  overflow-y: auto;
 }
 
-// md (≥ 992): side by side
-@media screen and (min-width: @screen-md-min) {
+// Tablet (768-1023px): stacked with better height utilization
+@media screen and (min-width: 768px) and (max-width: 1023px) {
   .posting-split {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: @grid-gutter-width;
-  }
-
-  .posting-split-form {
-    flex: 1 1 60%;
-    width: 60%;
+    gap: @line-height-computed * 1.5;
   }
 
   .posting-split > .panel-message-preview {
-    flex: 1 1 40%;
-    width: 40%;
-    position: sticky;
-    top: @navbar-height + @padding-base-vertical;
-    max-height: ~"calc(100vh - @{posting-split-preview-offset})";
+    max-height: ~"calc(100vh - @{posting-fullscreen-offset} - 200px)";
     overflow-y: auto;
   }
 }
 
-// lg (≥ 1200): give the editor a bit more room
-@media screen and (min-width: @screen-lg-min) {
+// Small Desktop (1024-1439px): side by side 50/50, good for 720p laptops
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  .posting-split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: @posting-split-gap-sm;
+  }
+
   .posting-split-form {
-    flex: 1 1 65%;
-    width: 65%;
+    flex: 1 1 50%;
+    width: 50%;
   }
 
   .posting-split > .panel-message-preview {
-    flex: 1 1 35%;
-    width: 35%;
+    flex: 1 1 50%;
+    width: 50%;
+    position: sticky;
+    top: @posting-fullscreen-offset;
+    max-height: ~"calc(100vh - @{posting-fullscreen-offset} - 20px)";
+    overflow-y: auto;
   }
 }
 
-// xl (≥ 1600): plenty of space, rebalance toward the preview
-@media screen and (min-width: 1600px) {
+// Desktop (1440-1919px): side by side 50/50, optimized spacing for 1080p
+@media screen and (min-width: 1440px) and (max-width: 1919px) {
+  .posting-split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: @posting-split-gap-md;
+  }
+
   .posting-split-form {
-    flex: 1 1 60%;
-    width: 60%;
+    flex: 1 1 50%;
+    width: 50%;
   }
 
   .posting-split > .panel-message-preview {
-    flex: 1 1 40%;
-    width: 40%;
+    flex: 1 1 50%;
+    width: 50%;
+    position: sticky;
+    top: @posting-fullscreen-offset;
+    max-height: ~"calc(100vh - @{posting-fullscreen-offset} - 30px)";
+    overflow-y: auto;
+  }
+}
+
+// Large Desktop (1920-2559px): side by side 50/50, enhanced for 1440p
+@media screen and (min-width: 1920px) and (max-width: 2559px) {
+  .posting-split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: @posting-split-gap-lg;
+  }
+
+  .posting-split-form {
+    flex: 1 1 50%;
+    width: 50%;
+  }
+
+  .posting-split > .panel-message-preview {
+    flex: 1 1 50%;
+    width: 50%;
+    position: sticky;
+    top: @posting-fullscreen-offset;
+    max-height: ~"calc(100vh - @{posting-fullscreen-offset} - 40px)";
+    overflow-y: auto;
+  }
+}
+
+// Ultra Wide (≥2560px): side by side 50/50, maximum for 4K
+@media screen and (min-width: 2560px) {
+  .posting-split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: @posting-split-gap-xl;
+  }
+
+  .posting-split-form {
+    flex: 1 1 50%;
+    width: 50%;
+  }
+
+  .posting-split > .panel-message-preview {
+    flex: 1 1 50%;
+    width: 50%;
+    position: sticky;
+    top: @posting-fullscreen-offset;
+    max-height: ~"calc(100vh - @{posting-fullscreen-offset} - 50px)";
+    overflow-y: auto;
   }
 }
 
@@ -92,6 +153,176 @@
   width: 100%;
   position: static;
   max-height: none;
+}
+
+// 全屏编辑模式 - 完全铺满浏览器
+// 实现真正的全屏编辑体验
+//
+// 结构（body 类由 base.html 的 body_class block 注入）:
+//   body.posting-edit-page
+//     └─ #misago-container (flex column, 100vh)
+//         ├─ .navbar / .misago-footer (隐藏)
+//         └─ #page-mount (flex:1)
+//             └─ .page (flex:1)
+//                 └─ #misago-htmx-root.posting-fullscreen (flex:1)
+//                     └─ .posting-split (flex:1, row/column)
+//                         ├─ form.posting-split-form (50%)
+//                         └─ .panel-message-preview (50%)
+
+// 全屏页面样式
+body.posting-edit-page {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  background: #fff !important;
+
+  // 隐藏导航栏、面包屑、页脚、页脚工具栏和开发警告横幅
+  .navbar,
+  .breadcrumbs,
+  .misago-footer,
+  .toolbar-over-footer,
+  #misago-dev-warning {
+    display: none !important;
+  }
+
+  // 高度链：从容器一路传到编辑区
+  #misago-container {
+    height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  #page-mount {
+    flex: 1 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+
+    > .page {
+      flex: 1 !important;
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      margin: 0 !important;
+    }
+  }
+
+  // 编辑根容器（HTMX 替换目标，id 保持不变）
+  #misago-htmx-root.posting-fullscreen {
+    flex: 1 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  // 桌面端：编辑器和预览左右 50/50
+  .posting-split {
+    flex: 1 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .posting-split-form {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+
+    // 面板填满表单列，按钮栏沉底
+    > .panel-form {
+      min-height: 100% !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+
+      > .panel-body {
+        flex: 1 !important;
+      }
+    }
+  }
+
+  .posting-split > .panel-message-preview {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    height: 100% !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    position: relative !important;
+    top: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  // 移动端/平板（<1024px）：编辑器在上、预览在下，铺满全屏
+  @media screen and (max-width: 1023px) {
+    .posting-split {
+      flex-direction: column !important;
+    }
+
+    .posting-split-form {
+      width: 100% !important;
+      flex: 1 1 50% !important;
+      height: auto !important;
+      min-height: 0 !important;
+    }
+
+    .posting-split > .panel-message-preview {
+      width: 100% !important;
+      flex: 1 1 50% !important;
+      height: auto !important;
+      min-height: 0 !important;
+    }
+  }
+}
+
+// 窄容器（如内联编辑）保持原样
+.posting-split-narrow {
+  flex-direction: column !important;
+  width: 100% !important;
+
+  .posting-split-form {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  > .panel-message-preview {
+    width: 100% !important;
+    height: auto !important;
+    position: static !important;
+  }
+}
+
+// Ensure proper spacing and layout in fullscreen mode
+.posting-fullscreen .posting-split {
+  padding: 0 @grid-gutter-width;
+  margin: 0;
+
+  @media screen and (min-width: 1024px) {
+    padding: 0 @posting-split-gap-sm;
+  }
+
+  @media screen and (min-width: 1440px) {
+    padding: 0 @posting-split-gap-md;
+  }
+
+  @media screen and (min-width: 1920px) {
+    padding: 0 @posting-split-gap-lg;
+  }
+
+  @media screen and (min-width: 2560px) {
+    padding: 0 @posting-split-gap-xl;
+  }
 }
 
 // Live preview behaviour

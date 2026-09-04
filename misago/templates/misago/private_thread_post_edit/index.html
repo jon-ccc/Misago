@@ -1,6 +1,8 @@
 {% extends "misago/base.html" %}
 {% load i18n misago_forms %}
 
+{% block body_class %} posting-edit-page{% endblock body_class %}
+
 
 {% block title %}
   {% translate "Edit post" context "edit thread post page" %} | {{ thread }} | {{ block.super }}

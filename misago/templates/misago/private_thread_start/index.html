@@ -2,6 +2,9 @@
 {% load i18n misago_component misago_forms %}
 
 
+{% block body_class %} posting-edit-page{% endblock body_class %}
+
+
 {% block title %}
   {% translate "Start new private thread" context "start thread page" %} | {{ block.super }}
 {% endblock title %}
@@ -9,9 +12,7 @@
 
 {% block content %}
 <div class="page page-start-private-thread">
-  <div class="container page-container">
-    {% includecomponent breadcrumbs %}
-
+  <div class="posting-fullscreen" id="misago-htmx-root">
     <div class="posting-split">
       <form
         class="posting-split-form"
@@ -45,8 +46,6 @@
 
       {% include "misago/posting/preview.html" %}
     </div>
-
-    {% include "misago/main_footer.html" %}
   </div>
 </div>
 {% endblock content %}

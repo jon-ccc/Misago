@@ -4,9 +4,7 @@
   {% include "misago/snackbars.html" %}
 {% endif %}
 
-<div class="container page-container" id="misago-htmx-root">
-  {% includecomponent breadcrumbs %}
-
+<div class="posting-fullscreen" id="misago-htmx-root">
   <div class="posting-split">
     <form
       class="posting-split-form"
@@ -44,6 +42,4 @@
 
     {% include "misago/posting/preview.html" %}
   </div>
-
-  {% include "misago/main_footer.html" %}
 </div>

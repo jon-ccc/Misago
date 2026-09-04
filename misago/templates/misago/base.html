@@ -13,7 +13,6 @@
       {% endfor %}
       {% if theme.include_defaults %}
         <link href="{% static 'misago/css/misago.css' %}" rel="stylesheet">
-        <link href="{% static 'misago/css/posting-split.css' %}" rel="stylesheet">
       {% endif %}
       {% for css_url in theme.styles %}
         <link href="{{ css_url }}" rel="stylesheet">
@@ -51,7 +50,7 @@
     {% pluginoutlet HEAD_END %}
     {% includecomponents before_head_close %}
   </head>
-  <body class="misago-{% if user.is_authenticated %}authenticated{% else %}anonymous{% endif %}{% if misago_agreement %} agreement-overlay-visible{% endif %}">
+  <body class="misago-{% if user.is_authenticated %}authenticated{% else %}anonymous{% endif %}{% if misago_agreement %} agreement-overlay-visible{% endif %}{% block body_class %}{% endblock body_class %}">
     <script type="text/javascript">
       document.body.classList.add("misago-javascript")
     </script>
