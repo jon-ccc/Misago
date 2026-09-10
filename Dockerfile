@@ -1,7 +1,7 @@
 # This Dockerfile is intended solely for local development of Misago
 # If you are seeking a suitable Docker setup for running Misago in a 
 # production, please use misago-docker instead
-FROM registry.cn-hangzhou.aliyuncs.com/library/python:3.12-bookworm
+FROM python:3.12-bookworm
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
