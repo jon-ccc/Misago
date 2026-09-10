@@ -1,12 +1,16 @@
 # This Dockerfile is intended solely for local development of Misago
 # If you are seeking a suitable Docker setup for running Misago in a 
 # production, please use misago-docker instead
-FROM python:3.12-bookworm
+FROM registry.cn-hangzhou.aliyuncs.com/library/python:3.12-bookworm
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV IN_MISAGO_DOCKER 1
 ENV MISAGO_PLUGINS "/app/plugins"
+
+# Use China mainland mirror for apt
+RUN sed -i 's|deb.debian.org|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources && \
+    sed -i 's|security.debian.org|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources
 
 # Install env dependencies in one single command/layer
 RUN apt-get update && apt-get install -y --allow-unauthenticated \
@@ -28,6 +32,10 @@ COPY plugins /app/plugins
 COPY requirements.txt /app/requirements.txt
 
 WORKDIR /app/
+
+# Use China mainland mirror for pip
+ENV PIP_INDEX_URL https://mirrors.aliyun.com/pypi/simple/
+ENV PIP_TRUSTED_HOST mirrors.aliyun.com
 
 # Install Misago requirements
 RUN pip install --no-cache-dir --upgrade pip && \
