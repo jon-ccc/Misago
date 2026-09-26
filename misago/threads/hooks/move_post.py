@@ -135,6 +135,7 @@ class MovePostHook(
         ).update(thread=new_thread, category=new_thread.category)
 
         return True
+    ```
     """
 
     __slots__ = FilterHook.__slots__

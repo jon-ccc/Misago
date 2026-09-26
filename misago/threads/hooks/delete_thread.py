@@ -93,6 +93,7 @@ class DeleteThreadHook(
         # Skip Django's delete collector logic
         delete_all(ThreadBoost, thread_id=thread.id)
         action(thread, request)
+    ```
     """
 
     __slots__ = FilterHook.__slots__

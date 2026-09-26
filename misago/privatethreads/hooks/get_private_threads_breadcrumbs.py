@@ -78,6 +78,7 @@ class GetPrivateThreadsBreadcrumbsHook(
         breadcrumbs = action(request)
         breadcrumbs["items"][-1]["icon"] = "tabler/lock.svg"
         return breadcrumbs
+    ```
     """
 
     __slots__ = FilterHook.__slots__

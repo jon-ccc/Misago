@@ -126,8 +126,8 @@ Register the IP address of the user who locked the post.
 
 ```python
 from django.http import HttpRequest
-from misago.posts.hooks import lock_post_hook
-from misago.posts.models import Post
+from misago.threads.hooks import lock_post_hook
+from misago.threads.models import Post
 from misago.users.models import User
 
 
@@ -150,3 +150,4 @@ def register_user_that_locked_post(
         post.save()
 
     return True
+```

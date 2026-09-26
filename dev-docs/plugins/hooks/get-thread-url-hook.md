@@ -96,5 +96,5 @@ def get_thread_blog_url(
             "blog", kwargs={"thread_id": thread.id, "slug": thread.slug}
         )
 
-    return = action(thread, category)
+    return action(thread, category)
 ```

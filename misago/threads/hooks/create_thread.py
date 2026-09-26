@@ -195,6 +195,7 @@ class CreateThreadHook(
             thread.save()
 
         return thread
+    ```
     """
 
     __slots__ = FilterHook.__slots__

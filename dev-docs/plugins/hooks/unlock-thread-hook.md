@@ -121,3 +121,4 @@ def register_user_that_unlocked_thread(
         thread.save()
 
     return True
+```

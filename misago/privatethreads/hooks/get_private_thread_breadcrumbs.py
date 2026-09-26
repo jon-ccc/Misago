@@ -94,6 +94,7 @@ class GetThreadBreadcrumbsHook(
         if thread.is_locked:
             breadcrumbs["items"][-1]["icon"] = "tabler/lock.svg"
         return breadcrumbs
+    ```
     """
 
     __slots__ = FilterHook.__slots__

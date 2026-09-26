@@ -93,8 +93,8 @@ class GetPostMergeConflictsHook(
 
     from django.db.models import Model
     from django.http import HttpRequest
-    from misago.posts.hooks import get_post_merge_conflicts_hook
-    from misago.posts.models import Post
+    from misago.threads.hooks import get_post_merge_conflicts_hook
+    from misago.threads.models import Post
     from myplugin.models import PluginModel
 
 
@@ -111,6 +111,7 @@ class GetPostMergeConflictsHook(
         )
 
         return conflicts
+    ```
     """
 
     __slots__ = FilterHook.__slots__

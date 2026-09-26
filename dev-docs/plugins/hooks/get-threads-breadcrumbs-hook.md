@@ -81,3 +81,4 @@ def set_threads_breadcrumb_icon(
     breadcrumbs = action(request)
     breadcrumbs["items"][-1]["icon"] = "tabler/lock.svg"
     return breadcrumbs
+```

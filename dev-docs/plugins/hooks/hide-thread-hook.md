@@ -150,3 +150,4 @@ def register_user_that_hid_thread(
         thread.save()
 
     return True
+```

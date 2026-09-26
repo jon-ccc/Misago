@@ -125,3 +125,4 @@ def register_user_that_set_require_thread_reply_approval(
         thread.save()
 
     return True
+```

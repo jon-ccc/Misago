@@ -93,6 +93,7 @@ class DeletePostHook(
         # Skip Django's delete collector logic
         delete_all(PostBoost, post_id=post.id)
         action(post, request)
+    ```
     """
 
     __slots__ = FilterHook.__slots__

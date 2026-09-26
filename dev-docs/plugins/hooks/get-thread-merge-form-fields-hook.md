@@ -119,3 +119,4 @@ def get_plugin_thread_merge_form_fields(
         )
 
     return fields
+```

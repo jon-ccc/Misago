@@ -119,8 +119,8 @@ class HidePostHook(
 
     ```python
     from django.http import HttpRequest
-    from misago.posts.hooks import hide_post_hook
-    from misago.posts.models import Post
+    from misago.threads.hooks import hide_post_hook
+    from misago.threads.models import Post
     from misago.users.models import User
 
 
@@ -143,6 +143,7 @@ class HidePostHook(
             post.save()
 
         return True
+    ```
     """
 
     __slots__ = FilterHook.__slots__

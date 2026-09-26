@@ -98,7 +98,8 @@ class CanUploadThreadsAttachmentsHook(
         if category.id in permissions.user.plugin_data.get("banned_attachments", []):
             return False
 
-        result action(permissions, category)
+        result = action(permissions, category)
+        return result
     ```
     """
 

@@ -121,3 +121,4 @@ def register_user_that_removed_require_thread_reply_approval(
         thread.save()
 
     return True
+```

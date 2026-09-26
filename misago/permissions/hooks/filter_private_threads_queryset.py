@@ -97,10 +97,10 @@ class FilterPrivateThreadsQuerysetHook(
         permissions: UserPermissionsProxy,
         queryset,
     ) -> None:
-       queryset = action(permissions, queryset)
+        queryset = action(permissions, queryset)
 
         if permissions.is_private_threads_moderator:
-           return queryset
+            return queryset
 
         return queryset.filter(
             last_posted_at__gt=timezone.now - timedelta(days=30),

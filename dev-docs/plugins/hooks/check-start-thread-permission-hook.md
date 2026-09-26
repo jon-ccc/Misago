@@ -93,7 +93,7 @@ def check_user_can_start_thread(
     user = permissions.user
     if (
         user.is_authenticated
-        and user.joined_on > timezone.now() - timedelta(days=7):
+        and user.joined_on > timezone.now() - timedelta(days=7)
     ):
         raise PermissionDenied(
             "Your account was created less than 7 days ago. "

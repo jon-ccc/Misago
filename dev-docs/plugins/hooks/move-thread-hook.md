@@ -141,3 +141,4 @@ def move_plugin_models_to_new_category(
     ).update(category=new_category)
 
     return True
+```

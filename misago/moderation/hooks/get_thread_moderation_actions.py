@@ -118,7 +118,7 @@ class GetThreadModerationActionsHook(
                 raise ValidationError("Thread is already shadow banned.")
 
         def execute(self) -> ModerationResult:
-            self.thread.plugin_data["shadow_banned] = True
+            self.thread.plugin_data["shadow_banned"] = True
             self.thread.save()
 
             messages.success(self.request, "Thread shadow banned")

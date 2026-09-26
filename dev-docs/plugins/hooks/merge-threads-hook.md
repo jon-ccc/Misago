@@ -154,3 +154,4 @@ def get_plugin_merge_conflicts(
     )
 
     return action(target, threads, conflicts, commit, request)
+```

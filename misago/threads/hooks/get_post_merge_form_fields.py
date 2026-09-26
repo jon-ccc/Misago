@@ -92,7 +92,7 @@ class GetPostMergeConflictsHook(
     from django.forms import Field
     from django.http import HttpRequest
     from django.utils.translation import pgettext
-    from misago.posts.hooks import get_post_merge_form_fields_hook
+    from misago.threads.hooks import get_post_merge_form_fields_hook
     from myplugin.models import PluginModel
 
 
@@ -119,6 +119,7 @@ class GetPostMergeConflictsHook(
             )
 
         return fields
+    ```
     """
 
     __slots__ = FilterHook.__slots__

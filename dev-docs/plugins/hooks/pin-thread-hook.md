@@ -140,3 +140,4 @@ def register_user_that_pinned_thread(
         thread.save()
 
     return True
+```

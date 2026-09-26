@@ -121,3 +121,4 @@ def register_user_that_unpinned_thread(
         thread.save()
 
     return True
+```

@@ -111,6 +111,7 @@ class GetCategoryBreadcrumbsHook(
         if include_category and category.is_locked:
             breadcrumbs[-1]["icon"] = "tabler/lock.svg"
         return breadcrumbs
+    ```
     """
 
     __slots__ = FilterHook.__slots__

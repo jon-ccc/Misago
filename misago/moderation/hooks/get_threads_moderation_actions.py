@@ -114,7 +114,7 @@ class GetThreadsModerationActionsHook(
             ]
 
             for thread in valid_threads:
-                thread.plugin_data["shadow_banned] = True
+                thread.plugin_data["shadow_banned"] = True
                 thread.save()
 
             messages.success(self.request, "Threads shadow banned")

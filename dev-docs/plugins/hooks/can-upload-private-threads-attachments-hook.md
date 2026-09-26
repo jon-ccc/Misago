@@ -71,7 +71,7 @@ A proxy object with the current user's permissions.
 The code below implements a custom filter function that prevents a user from uploading attachments in private threads if a custom flag is set on their account.
 
 ```python
-from misago.permissions.hooks import can_upload_threads_attachments_hook
+from misago.permissions.hooks import can_upload_private_threads_attachments_hook
 from misago.permissions.proxy import UserPermissionsProxy
 
 @can_upload_private_threads_attachments_hook.append_filter
@@ -82,5 +82,6 @@ def user_can_upload_attachments_in_category(
     if permissions.user.plugin_data.get("banned_private_threads_attachments"):
         return False
 
-    result action(permissions)
+    result = action(permissions)
+    return result
 ```

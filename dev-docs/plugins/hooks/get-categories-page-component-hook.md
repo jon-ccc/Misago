@@ -80,10 +80,10 @@ The code below implements a custom filter function that replaces default categor
 
 ```python
 from django.http import HttpRequest
-from misago.categories.hooks import get_categories_component_hook
+from misago.categories.hooks import get_categories_page_component_hook
 
 
-@get_categories_component_hook.append_filter
+@get_categories_page_component_hook.append_filter
 def custom_categories_list(action, request: HttpRequest) -> dict:
     return {
         "categories": [],

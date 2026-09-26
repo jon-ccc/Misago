@@ -106,6 +106,8 @@ def count_post_edit_deletions(
     post = post_edit.post
     action(post_edit, commit, request)
 
-    post.plugin_data.setdefault("deleted_edits", 0) += 1
+    post.plugin_data["deleted_edits"] = (
+        post.plugin_data.get("deleted_edits", 0) + 1
+    )
     post.save(update_fields=["plugin_data"])
 ```

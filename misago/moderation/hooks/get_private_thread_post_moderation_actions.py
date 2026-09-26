@@ -120,7 +120,7 @@ class GetPrivateThreadPostModerationActionsHook(
                 raise ValidationError("Post is already shadow banned.")
 
         def execute(self) -> ModerationResult:
-            self.post.plugin_data["shadow_banned] = True
+            self.post.plugin_data["shadow_banned"] = True
             self.post.save()
 
             messages.success(self.request, "Post shadow banned")

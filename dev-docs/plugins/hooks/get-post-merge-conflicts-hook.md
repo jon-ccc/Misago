@@ -95,8 +95,8 @@ from typing import Iterable
 
 from django.db.models import Model
 from django.http import HttpRequest
-from misago.posts.hooks import get_post_merge_conflicts_hook
-from misago.posts.models import Post
+from misago.threads.hooks import get_post_merge_conflicts_hook
+from misago.threads.models import Post
 from myplugin.models import PluginModel
 
 
@@ -113,3 +113,4 @@ def get_plugin_merge_conflicts(
     )
 
     return conflicts
+```

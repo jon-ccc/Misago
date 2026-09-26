@@ -96,8 +96,8 @@ class UnhidePostHook(
 
     ```python
     from django.http import HttpRequest
-    from misago.posts.hooks import unhide_post_hook
-    from misago.posts.models import Post
+    from misago.threads.hooks import unhide_post_hook
+    from misago.threads.models import Post
 
 
     @unhide_post_hook.append_filter
@@ -117,6 +117,7 @@ class UnhidePostHook(
             post.save()
 
         return True
+    ```
     """
 
     __slots__ = FilterHook.__slots__

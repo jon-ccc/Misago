@@ -121,6 +121,7 @@ class RequireThreadReplyApprovalHook(
             thread.save()
 
         return True
+    ```
     """
 
     __slots__ = FilterHook.__slots__

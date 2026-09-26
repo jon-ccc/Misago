@@ -86,7 +86,7 @@ class GetUserPermissionsHook(
 
     ```python
     from django.contrib.auth.models import AnonymousUser
-    from misago.permissions.hooks import build_user_permissions_hook
+    from misago.permissions.hooks import get_user_permissions_hook
     from misago.users.models import User
 
 

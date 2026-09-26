@@ -95,3 +95,4 @@ def set_thread_breadcrumb_icon(
     if thread.is_locked:
         breadcrumbs["items"][-1]["icon"] = "tabler/lock.svg"
     return breadcrumbs
+```

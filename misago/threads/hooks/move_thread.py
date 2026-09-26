@@ -136,6 +136,7 @@ class MoveThreadHook(
         ).update(category=new_category)
 
         return True
+    ```
     """
 
     __slots__ = FilterHook.__slots__

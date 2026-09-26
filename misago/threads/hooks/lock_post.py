@@ -119,8 +119,8 @@ class LockPostHook(
 
     ```python
     from django.http import HttpRequest
-    from misago.posts.hooks import lock_post_hook
-    from misago.posts.models import Post
+    from misago.threads.hooks import lock_post_hook
+    from misago.threads.models import Post
     from misago.users.models import User
 
 
@@ -143,6 +143,7 @@ class LockPostHook(
             post.save()
 
         return True
+    ```
     """
 
     __slots__ = FilterHook.__slots__

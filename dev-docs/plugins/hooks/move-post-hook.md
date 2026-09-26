@@ -140,3 +140,4 @@ def move_plugin_models_to_new_thread(
     ).update(thread=new_thread, category=new_thread.category)
 
     return True
+```

@@ -113,3 +113,4 @@ def get_plugin_merge_conflicts(
     )
 
     return conflicts
+```

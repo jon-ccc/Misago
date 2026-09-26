@@ -127,7 +127,7 @@ class GetThreadPostsModerationActionsHook(
             ]
 
             for post in valid_posts:
-                post.plugin_data["shadow_banned] = True
+                post.plugin_data["shadow_banned"] = True
                 post.save()
 
             messages.success(self.request, "Posts shadow banned")

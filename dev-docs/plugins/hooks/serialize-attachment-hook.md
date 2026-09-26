@@ -79,6 +79,6 @@ def serialize_attachment_exif_data(
     action, attachment: Attachment
 ) -> dict:
     data = action(attachment)
-    data["exif"] = attachment.plugin_data.get("exif)
+    data["exif"] = attachment.plugin_data.get("exif")
     return data
 ```

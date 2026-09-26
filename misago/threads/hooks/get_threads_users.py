@@ -76,21 +76,29 @@ class GetThreadsUsersHook(
 
     # Example
 
-    The code below implements a custom filter function that excludes users with
-    plugin status from the users list:
+    The code below implements a custom filter function that excludes users
+    hidden by the plugin from the threads list:
 
     ```python
     from django.http import HttpRequest
+
     from misago.threads.hooks import get_threads_users_hook
+    from misago.threads.models import Thread
+    from misago.users.models import User
 
 
     @get_threads_users_hook.append_filter
-    def include_custom_context(action, request: HttpRequest, kwargs: dict) -> dict:
-        context = action(request, kwargs)
+    def exclude_hidden_users(
+        action, request: HttpRequest, threads: list[Thread]
+    ) -> dict[int, User]:
+        users = action(request, threads)
 
-        context["plugin_data"] = "..."
+        for thread in threads:
+            hidden_user_id = thread.plugin_data.get("hidden_user_id")
+            if hidden_user_id and hidden_user_id in users:
+                del users[hidden_user_id]
 
-        return context
+        return users
     ```
     """
 

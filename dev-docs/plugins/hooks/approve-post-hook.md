@@ -100,8 +100,8 @@ Register user who approved the post:
 
 ```python
 from django.http import HttpRequest
-from misago.posts.hooks import approve_post_hook
-from misago.posts.models import Post
+from misago.threads.hooks import approve_post_hook
+from misago.threads.models import Post
 
 
 @approve_post_hook.append_filter
@@ -121,3 +121,4 @@ def register_user_that_approved_post(
         post.save()
 
     return True
+```

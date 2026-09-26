@@ -93,3 +93,4 @@ def delete_post_boosts(
     # Skip Django's delete collector logic
     delete_all(PostBoost, post_id=post.id)
     action(post, request)
+```

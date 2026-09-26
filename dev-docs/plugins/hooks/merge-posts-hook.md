@@ -157,8 +157,8 @@ from typing import Iterable
 
 from django.db.models import Model
 from django.http import HttpRequest
-from misago.posts.hooks import merge_posts_hook
-from misago.posts.models import Post
+from misago.threads.hooks import merge_posts_hook
+from misago.threads.models import Post
 from misago.users.models import User
 from myplugin.models import PluginModel
 
@@ -187,3 +187,4 @@ def get_plugin_merge_conflicts(
         commit,
         request,
     )
+```

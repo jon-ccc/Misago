@@ -93,3 +93,4 @@ def delete_thread_boosts(
     # Skip Django's delete collector logic
     delete_all(ThreadBoost, thread_id=thread.id)
     action(thread, request)
+```

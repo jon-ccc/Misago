@@ -85,7 +85,7 @@ class CopyCategoryPermissionsHook(
     from misago.permissions.hooks import copy_category_permissions_hook
     from misago.users.models import Category
 
-    from .models PluginCategoryPermissions
+    from .models import PluginCategoryPermissions
 
 
     @copy_category_permissions_hook.append_filter

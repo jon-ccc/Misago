@@ -145,6 +145,7 @@ class MergeThreadsHook(
         )
 
         return action(target, threads, conflicts, commit, request)
+    ```
     """
 
     __slots__ = FilterHook.__slots__

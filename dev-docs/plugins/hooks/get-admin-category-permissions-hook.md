@@ -49,13 +49,13 @@ def add_plugin_category_permissions(form: PermissionsFormView) -> list[dict]:
         form.create_permission(
             id="BUMP",
             name="Bump threads",
-            help_text="Allows users to bump threads."
+            help_text="Allows users to bump threads.",
             color="#ecfeff",
         ),
         form.create_permission(
             id="BURY",
             name="Bury threads",
-            help_text="Allows users to bury threads."
+            help_text="Allows users to bury threads.",
             color="#f5f3ff",
         ),
     ]
@@ -65,7 +65,7 @@ To create a `dict` with permission's data, you should use the `create_permission
 
 ```python
 def create_permission(
-    id: str, name: str, help_text: str | None = None, , color: str | None = None
+    id: str, name: str, help_text: str | None = None, color: str | None = None
 ) -> dict:
     ...
 ```

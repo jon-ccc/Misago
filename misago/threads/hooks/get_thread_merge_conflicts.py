@@ -111,6 +111,7 @@ class GetThreadMergeConflictsHook(
         )
 
         return conflicts
+    ```
     """
 
     __slots__ = FilterHook.__slots__
