@@ -124,7 +124,10 @@ class UserSerializer(serializers.ModelSerializer, MutableFields):
         # These endpoints may be absent (e.g. when the user threads/posts API
         # actions have been removed). Resolve them defensively so that a
         # missing URL name does not crash serialization.
-        for key, name in (("threads", "misago:api:user-threads"), ("posts", "misago:api:user-posts")):
+        for key, name in (
+            ("threads", "misago:api:user-threads"),
+            ("posts", "misago:api:user-posts"),
+        ):
             try:
                 api[key] = reverse(name, kwargs={"pk": obj.pk})
             except NoReverseMatch:
