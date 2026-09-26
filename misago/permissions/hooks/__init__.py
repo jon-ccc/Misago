@@ -112,6 +112,7 @@ from .filter_private_threads_queryset import filter_private_threads_queryset_hoo
 from .filter_thread_events_queryset import filter_thread_events_queryset_hook
 from .filter_thread_posts_queryset import filter_thread_posts_queryset_hook
 from .get_admin_category_permissions import get_admin_category_permissions_hook
+from .get_category_access_level import get_category_access_level_hook
 from .get_category_threads_category_query import (
     get_category_threads_category_query_hook,
 )
@@ -185,6 +186,7 @@ __all__ = [
     "filter_thread_posts_queryset_hook",
     "filter_thread_events_queryset_hook",
     "get_admin_category_permissions_hook",
+    "get_category_access_level_hook",
     "get_category_threads_category_query_hook",
     "get_category_threads_pinned_category_query_hook",
     "get_category_threads_query_hook",

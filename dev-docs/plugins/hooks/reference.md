@@ -8,6 +8,7 @@ Hooks instances are importable from the following Python modules:
 - [`misago.categories.hooks`](#misago-categories-hooks)
 - [`misago.context_processors.hooks`](#misago-context-processors-hooks)
 - [`misago.likes.hooks`](#misago-likes-hooks)
+- [`misago.metatags.hooks`](#misago-metatags-hooks)
 - [`misago.moderation.hooks`](#misago-moderation-hooks)
 - [`misago.notifications.hooks`](#misago-notifications-hooks)
 - [`misago.oauth2.hooks`](#misago-oauth2-hooks)
@@ -64,6 +65,14 @@ Hooks instances are importable from the following Python modules:
 - [`like_post_hook`](./like-post-hook.md)
 - [`remove_post_like_hook`](./remove-post-like-hook.md)
 - [`synchronize_post_likes_hook`](./synchronize-post-likes-hook.md)
+
+
+## `misago.metatags.hooks`
+
+`misago.metatags.hooks` defines the following hooks:
+
+- [`get_default_metatags_hook`](./get-default-metatags-hook.md)
+- [`get_forum_index_metatags_hook`](./get-forum-index-metatags-hook.md)
 
 
 ## `misago.moderation.hooks`
@@ -176,6 +185,7 @@ Hooks instances are importable from the following Python modules:
 - [`filter_thread_events_queryset_hook`](./filter-thread-events-queryset-hook.md)
 - [`filter_thread_posts_queryset_hook`](./filter-thread-posts-queryset-hook.md)
 - [`get_admin_category_permissions_hook`](./get-admin-category-permissions-hook.md)
+- [`get_category_access_level_hook`](./get-category-access-level-hook.md)
 - [`get_category_threads_category_query_hook`](./get-category-threads-category-query-hook.md)
 - [`get_category_threads_pinned_category_query_hook`](./get-category-threads-pinned-category-query-hook.md)
 - [`get_category_threads_query_hook`](./get-category-threads-query-hook.md)
@@ -289,6 +299,7 @@ Hooks instances are importable from the following Python modules:
 - [`get_thread_merge_form_fields_hook`](./get-thread-merge-form-fields-hook.md)
 - [`get_thread_url_hook`](./get-thread-url-hook.md)
 - [`get_threads_breadcrumbs_hook`](./get-threads-breadcrumbs-hook.md)
+- [`get_threads_users_hook`](./get-threads-users-hook.md)
 - [`hide_post_hook`](./hide-post-hook.md)
 - [`hide_thread_hook`](./hide-thread-hook.md)
 - [`lock_post_hook`](./lock-post-hook.md)

@@ -32,7 +32,7 @@ def create_new_outlet(outlet_name: str):
     if outlet_name in template_outlets:
         raise ValueError(f"Template outlet '{outlet_name}' already exists.")
 
-    template_outlets[plugin_outlet.name] = PluginOutletHook()
+    template_outlets[outlet_name] = PluginOutletHook()
 
 
 for plugin_outlet in PluginOutlet:

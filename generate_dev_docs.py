@@ -1,6 +1,7 @@
 # Script for generating some of documents in `dev-docs` from Misago's code
 import ast
 import os
+import re
 import sys
 from argparse import ArgumentParser
 from dataclasses import dataclass, field
@@ -15,6 +16,7 @@ HOOKS_MODULES = (
     "misago.categories.hooks",
     "misago.context_processors.hooks",
     "misago.likes.hooks",
+    "misago.metatags.hooks",
     "misago.moderation.hooks",
     "misago.notifications.hooks",
     "misago.oauth2.hooks",
@@ -57,7 +59,171 @@ class FilesReport:
         return 0
 
 
+def get_hooks_modules_from_codebase() -> dict[str, Path]:
+    hooks_modules: dict[str, Path] = {}
+    for init_path in glob(f"{BASE_PATH}/misago/*/hooks/__init__.py"):
+        init_path = Path(init_path)
+        module_name = ".".join(init_path.parent.relative_to(BASE_PATH).parts)
+        hooks_modules[module_name] = init_path
+    return hooks_modules
+
+
+def get_module_all_names(module: ast.Module) -> list[str] | None:
+    for item in module.body:
+        if not isinstance(item, ast.Assign):
+            continue
+
+        if not item.targets or not isinstance(item.targets[0], ast.Name):
+            continue
+
+        if item.targets[0].id != "__all__":
+            continue
+
+        if not isinstance(item.value, (ast.List, ast.Tuple)):
+            continue
+
+        return [
+            element.value
+            for element in item.value.elts
+            if isinstance(element, ast.Constant) and isinstance(element.value, str)
+        ]
+
+    return None
+
+
+def get_module_hook_names(module: ast.Module) -> list[str]:
+    hook_names: list[str] = []
+    for item in module.body:
+        if not isinstance(item, ast.Assign):
+            continue
+
+        if not isinstance(item.value, ast.Call):
+            continue
+
+        for target in item.targets:
+            if isinstance(target, ast.Name) and target.id.endswith("_hook"):
+                hook_names.append(target.id)
+
+    return hook_names
+
+
+def validate_hooks_modules() -> list[str]:
+    """Verify that every hook in the codebase is reachable from HOOKS_MODULES.
+
+    The reference is built by walking HOOKS_MODULES, so a hooks package that is
+    missing from it - or a hook that isn't re-exported from its package's
+    `__init__.py` - is silently left undocumented instead of failing the build.
+    """
+    problems: list[str] = []
+    declared_modules = set(HOOKS_MODULES)
+    codebase_modules = get_hooks_modules_from_codebase()
+
+    for module_name in sorted(codebase_modules):
+        init_path = codebase_modules[module_name]
+
+        if module_name not in declared_modules:
+            problems.append(
+                f"'{module_name}' exists in the codebase "
+                f"but is missing from HOOKS_MODULES"
+            )
+            continue
+
+        all_names = get_module_all_names(parse_python_file(init_path))
+        if all_names is None:
+            problems.append(f"'{module_name}': '__init__.py' doesn't define '__all__'")
+            continue
+
+        exported_names = set(all_names)
+        for hook_path in sorted(init_path.parent.glob("*.py")):
+            if hook_path.name == "__init__.py":
+                continue
+
+            for hook_name in get_module_hook_names(parse_python_file(hook_path)):
+                if hook_name not in exported_names:
+                    problems.append(
+                        f"'{hook_name}' is defined in '{format_path(hook_path)}' "
+                        f"but is not exported from '{module_name}'"
+                    )
+
+    for module_name in sorted(declared_modules - set(codebase_modules)):
+        problems.append(
+            f"'{module_name}' is in HOOKS_MODULES but doesn't exist in the codebase"
+        )
+
+    return problems
+
+
+def print_hooks_validation_message(problems: list[str]):
+    lines: list[str] = [
+        "",
+        "The hooks reference can't be generated because its sources are invalid:",
+        "",
+    ]
+
+    for problem in problems:
+        lines.append(f"- {problem}")
+
+    problems_noun = "problem" if len(problems) == 1 else "problems"
+    lines.append("")
+    lines.append(f"{len(problems)} {problems_noun} found.")
+
+    sys.stderr.write("\n".join(lines))
+
+
+def get_hook_example_blocks(docstring: str) -> list[str]:
+    return re.findall(r"```python\n(.*?)```", docstring, re.S)
+
+
+def validate_hook_examples() -> list[str]:
+    """Verify that the examples in hooks' docstrings are valid Python.
+
+    Example blocks are rendered verbatim into the generated reference, so a typo
+    ships as broken documentation that plugin authors then copy. An unclosed code
+    fence is reported too, because it swallows the rest of the generated page.
+    """
+    problems: list[str] = []
+
+    for hooks_module in HOOKS_MODULES:
+        init_path = module_path_to_init_path(hooks_module)
+
+        for hook_path in sorted(init_path.parent.glob("*.py")):
+            if hook_path.name == "__init__.py":
+                continue
+
+            for class_def in parse_python_file(hook_path).body:
+                if not isinstance(class_def, ast.ClassDef):
+                    continue
+
+                docstring = ast.get_docstring(class_def)
+                if not docstring:
+                    continue
+
+                if docstring.count("```") % 2:
+                    problems.append(
+                        f"'{format_path(hook_path)}': '{class_def.name}' has an "
+                        f"unclosed code fence in its docstring"
+                    )
+
+                for block in get_hook_example_blocks(docstring):
+                    try:
+                        ast.parse(dedent(block))
+                    except SyntaxError as error:
+                        problems.append(
+                            f"'{format_path(hook_path)}': '{class_def.name}' has an "
+                            f"example that isn't valid Python "
+                            f"(line {error.lineno}: {error.msg})"
+                        )
+
+    return problems
+
+
 def main(check: bool):
+    problems = validate_hooks_modules() + validate_hook_examples()
+    if problems:
+        print_hooks_validation_message(problems)
+        sys.stdout.write("\n")
+        return 1
+
     files_content: dict[Path, str] = {}
     files_content.update(generate_plugin_manifest_reference())
     files_content.update(generate_hooks_reference())

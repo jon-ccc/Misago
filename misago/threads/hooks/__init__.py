@@ -14,6 +14,7 @@ from .get_thread_merge_conflicts import get_thread_merge_conflicts_hook
 from .get_thread_merge_form_fields import get_thread_merge_form_fields_hook
 from .get_thread_url import get_thread_url_hook
 from .get_threads_breadcrumbs import get_threads_breadcrumbs_hook
+from .get_threads_users import get_threads_users_hook
 from .hide_post import hide_post_hook
 from .hide_thread import hide_thread_hook
 from .lock_post import lock_post_hook
@@ -48,6 +49,7 @@ __all__ = [
     "get_thread_merge_form_fields_hook",
     "get_thread_url_hook",
     "get_threads_breadcrumbs_hook",
+    "get_threads_users_hook",
     "hide_post_hook",
     "hide_thread_hook",
     "lock_post_hook",
